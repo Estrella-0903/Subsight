@@ -1,0 +1,2 @@
+import {Navigate,useLocation,useNavigate} from 'react-router-dom';import {LogOut} from 'lucide-react';import {authStore} from '../api';
+export default function RequireAuth({children}:{children:React.ReactNode}){const location=useLocation();const navigate=useNavigate();if(!authStore.get())return <Navigate to="/login" replace state={{from:location.pathname}}/>;return <><button className="session-logout" onClick={()=>{authStore.clear();navigate('/login',{replace:true})}} title="退出当前账号"><LogOut/>退出登录</button>{children}</>}
