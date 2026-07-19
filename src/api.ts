@@ -2,6 +2,7 @@ import type {Policy} from './types';
 import {enterprise,policies} from './data';
 
 const TOKEN_KEY='subsight-auth-token';
+const STATIC_DEMO=typeof window!=='undefined'&&window.location.hostname.endsWith('github.io');
 export const authStore={
   get:()=>localStorage.getItem(TOKEN_KEY),
   set:(token:string,user:unknown)=>{localStorage.setItem(TOKEN_KEY,token);localStorage.setItem('subsight-user',JSON.stringify(user))},
@@ -22,6 +23,7 @@ type LoginResult={token:string;user:{id:number;email:string;name:string;role:str
 type BackendEnterprise={name:string;region:string;industry:string;founded_at:string;employees:number;revenue:number;rd_investment:number;rd_people:number;invention_patents:number;utility_patents:number;software_copyrights:number};
 
 async function hydrateFromDatabase(){
+  if(STATIC_DEMO)return;
   try{
     const [policyResult,company]=await Promise.all([
       request<{items:Policy[]}>('/policies'),
@@ -35,7 +37,16 @@ async function hydrateFromDatabase(){
 }
 
 export const api={
-  login:async(email:string,password:string)=>{const result=await request<LoginResult>('/auth/login',{method:'POST',body:JSON.stringify({email,password})});authStore.set(result.token,result.user);await hydrateFromDatabase();return result},
+  login:async(email:string,password:string)=>{
+    if(STATIC_DEMO){
+      await new Promise(resolve=>window.setTimeout(resolve,450));
+      if(email.toLowerCase()!=='demo@subsight.cn'||password!=='Demo123456')throw new Error('邮箱或密码错误');
+      const result:LoginResult={token:'github-pages-demo-token',user:{id:1,email:'demo@subsight.cn',name:'张经理',role:'enterprise'}};
+      authStore.set(result.token,result.user);
+      return result;
+    }
+    const result=await request<LoginResult>('/auth/login',{method:'POST',body:JSON.stringify({email,password})});authStore.set(result.token,result.user);await hydrateFromDatabase();return result;
+  },
   me:()=>request<{user:unknown}>('/auth/me'),
   policies:()=>request<{items:Policy[]}>('/policies'),
   enterprise:()=>request<BackendEnterprise>('/enterprise'),
