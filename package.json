@@ -1,9 +1,0 @@
-{
-  "name": "subsight-demo",
-  "private": true,
-  "version": "1.0.0",
-  "type": "module",
-  "scripts": {"dev":"concurrently -n WEB,API -c blue,green \"npm:dev:web\" \"npm:dev:api\"","dev:web":"vite","dev:api":"node --watch server/index.js","build":"tsc -b && vite build && node scripts/copy-spa-fallback.mjs","preview":"vite preview","start":"node server/index.js"},
-  "dependencies": {"@vitejs/plugin-react":"latest","vite":"latest","typescript":"latest","react":"latest","react-dom":"latest","react-router-dom":"latest","lucide-react":"latest","recharts":"latest","framer-motion":"latest","express":"latest","cors":"latest","better-sqlite3":"latest","bcryptjs":"latest","jsonwebtoken":"latest","concurrently":"latest"},
-  "devDependencies": {"@types/react":"latest","@types/react-dom":"latest"}
-}

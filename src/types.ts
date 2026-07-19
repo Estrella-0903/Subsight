@@ -1,2 +1,0 @@
-export type Policy={id:string;title:string;policyNumber:string;department:string;level:string;region:string;category:string;supportType:string;supportRange:string;publishDate:string;startDate:string;deadline:string;officialUrl:string;summary:string;requirements:string[];requiredMaterials:string[];matchScore:number;matchedConditions:string[];unmatchedConditions:string[];pendingConditions:string[];officialSource:string;updatedAt:string;status:string};
-export type ToastMessage={id:number;text:string;type?:'success'|'info'|'error'};
